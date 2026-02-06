@@ -7,10 +7,14 @@ export class SupabaseService {
   private supabase: SupabaseClient;
 
   constructor(private configService: ConfigService) {
-    this.supabase = createClient(
-      this.configService.get<string>('SUPABASE_URL'),
-      this.configService.get<string>('SUPABASE_KEY'),
-    );
+    const supabaseUrl = this.configService.get<string>('SUPABASE_URL');
+    const supabaseKey = this.configService.get<string>('SUPABASE_KEY');
+
+    if (!supabaseUrl || !supabaseKey) {
+      throw new Error('SUPABASE_URL and SUPABASE_KEY must be configured');
+    }
+
+    this.supabase = createClient(supabaseUrl, supabaseKey);
   }
 
   getClient(): SupabaseClient {
@@ -18,9 +22,17 @@ export class SupabaseService {
   }
 
   getAdminClient(): SupabaseClient {
-    return createClient(
-      this.configService.get<string>('SUPABASE_URL'),
-      this.configService.get<string>('SUPABASE_SERVICE_KEY'),
+    const supabaseUrl = this.configService.get<string>('SUPABASE_URL');
+    const supabaseServiceKey = this.configService.get<string>(
+      'SUPABASE_SERVICE_KEY',
     );
+
+    if (!supabaseUrl || !supabaseServiceKey) {
+      throw new Error(
+        'SUPABASE_URL and SUPABASE_SERVICE_KEY must be configured',
+      );
+    }
+
+    return createClient(supabaseUrl, supabaseServiceKey);
   }
 }

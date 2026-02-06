@@ -11,12 +11,12 @@ export class DbService implements OnModuleInit {
 
   constructor(private configService: ConfigService) {}
 
-  async onModuleInit() {
-    this.client = postgres(this.configService.get<string>('DATABASE_URL'));
+  onModuleInit() {
+    const databaseUrl = this.configService.get<string>('DATABASE_URL');
+    if (!databaseUrl) {
+      throw new Error('DATABASE_URL is not configured');
+    }
+    this.client = postgres(databaseUrl);
     this.db = drizzle(this.client, { schema });
-  }
-
-  async onModuleDestroy() {
-    await this.client.end();
   }
 }
