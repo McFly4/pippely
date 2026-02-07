@@ -12,7 +12,6 @@ export class UsersController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    console.log('ID reçu:', id);
     return this.usersService.findOne(id);
   }
 }

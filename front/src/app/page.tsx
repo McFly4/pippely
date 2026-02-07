@@ -1,11 +1,10 @@
+"use client"
 import { useGetUsers } from "@/hooks/users/useGetUsers.hook"
 
 export default function Page() {
-  const { data: users } = useGetUsers()
-
   return (
     <div>
-      <div>{users}</div>
+      salut la team :<div></div>
     </div>
   )
 }
