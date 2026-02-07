@@ -5,11 +5,30 @@ import { workspaceMembers } from './workspace-members.schema';
 import { companies } from './companies.schema';
 import { contacts } from './contacts.schema';
 import { revenues } from './revenues.schema';
+import { sessions, accounts } from './auth.schema';
 
 // Relations pour users
 export const usersRelations = relations(users, ({ many }) => ({
   ownedWorkspaces: many(workspaces),
   workspaceMemberships: many(workspaceMembers),
+  sessions: many(sessions),
+  accounts: many(accounts),
+}));
+
+// Relations pour sessions
+export const sessionsRelations = relations(sessions, ({ one }) => ({
+  user: one(users, {
+    fields: [sessions.userId],
+    references: [users.id],
+  }),
+}));
+
+// Relations pour accounts
+export const accountsRelations = relations(accounts, ({ one }) => ({
+  user: one(users, {
+    fields: [accounts.userId],
+    references: [users.id],
+  }),
 }));
 
 // Relations pour workspaces
