@@ -1,27 +1,42 @@
-import { Injectable } from '@nestjs/common';
-import { auth } from './auth.config';
+import { Injectable, OnModuleInit } from '@nestjs/common';
+import { getAuth } from './auth.config';
 
 @Injectable()
-export class AuthService {
+export class AuthService implements OnModuleInit {
+  private auth: any;
+
+  /**
+   * Initialise Better Auth au démarrage du module
+   */
+  async onModuleInit() {
+    this.auth = await getAuth();
+  }
+
   /**
    * Récupère l'instance Better Auth
    */
   getAuthInstance() {
-    return auth;
+    return this.auth;
   }
 
   /**
    * Gère les requêtes d'authentification
    */
   async handleRequest(request: Request): Promise<Response> {
-    return auth.handler(request);
+    if (!this.auth) {
+      this.auth = await getAuth();
+    }
+    return this.auth.handler(request);
   }
 
   /**
    * Récupère la session depuis une requête
    */
   async getSession(request: Request) {
-    return auth.api.getSession({
+    if (!this.auth) {
+      this.auth = await getAuth();
+    }
+    return this.auth.api.getSession({
       headers: request.headers,
     });
   }
