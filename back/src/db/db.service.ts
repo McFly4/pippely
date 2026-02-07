@@ -1,22 +1,14 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { drizzle } from 'drizzle-orm/postgres-js';
+import { drizzle, PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 import * as schema from './schema';
+import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class DbService implements OnModuleInit {
-  public db;
-  private client;
+export class DbService {
+  public readonly db: PostgresJsDatabase<typeof schema>;
 
-  constructor(private configService: ConfigService) {}
-
-  onModuleInit() {
-    const databaseUrl = this.configService.get<string>('DATABASE_URL');
-    if (!databaseUrl) {
-      throw new Error('DATABASE_URL is not configured');
-    }
-    this.client = postgres(databaseUrl);
-    this.db = drizzle(this.client, { schema });
+  constructor() {
+    const client = postgres(process.env.DATABASE_URL!);
+    this.db = drizzle(client, { schema });
   }
 }

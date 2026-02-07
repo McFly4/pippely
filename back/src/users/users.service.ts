@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { DbService } from '../db/db.service';
-import type { InferSelectModel } from 'drizzle-orm';
+import { eq, InferSelectModel } from 'drizzle-orm';
 import { users } from '../db/schema';
 
 type User = InferSelectModel<typeof users>;
@@ -14,8 +14,12 @@ export class UsersService {
   }
 
   async findOne(id: string): Promise<User> {
-    return this.dbService.db.query.users.findFirst({
-      where: (users, { eq }) => eq(users.id, id),
+    const user = await this.dbService.db.query.users.findFirst({
+      where: eq(users.id, id),
     });
+    if (!user) {
+      throw new NotFoundException(`User with ID ${id} not found`);
+    }
+    return user;
   }
 }
