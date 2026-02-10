@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react"
 import type { User, Session } from "@/auth/types/auth"
-import { getSession } from "@/auth/services"
+import { getSession } from "@/auth/services/getSession"
 
 interface AuthContextType {
   user: User | null
@@ -39,7 +39,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     session,
     isLoading,
     isAuthenticated: !!session?.user,
-    refetchSession: fetchSession,
+    refetchSession: fetchSession
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

@@ -1,29 +1,34 @@
 "use client"
 
 import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { useSignUp } from "@/auth/hooks"
 import { Button } from "@/shared/components/ui/button"
 import { Input } from "@/shared/components/ui/input"
 import { Label } from "@/shared/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/components/ui/card"
+import { useSignUp } from "@/auth/hooks/useSignUp"
+import { toast } from "sonner"
 
-export function SignUpForm() {
-  const router = useRouter()
-  const { mutate: signUp, isPending, isError, error } = useSignUp()
+export default function SignUpForm() {
+  const { mutate: signUp, isPending } = useSignUp()
   const [formData, setFormData] = useState({
     email: "",
     password: "",
     firstName: "",
-    lastName: "",
+    lastName: ""
   })
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+  function handleSubmit() {
     signUp(formData, {
       onSuccess: () => {
-        router.push("/")
+        toast.success("Inscription réussie ! Veuillez vérifier votre email pour confirmer votre compte.", {
+          position: "top-right"
+        })
       },
+      onError: (error: any) => {
+        toast.error(error, {
+          position: "top-right"
+        })
+      }
     })
   }
 
@@ -43,9 +48,8 @@ export function SignUpForm() {
                 type="text"
                 placeholder="Jean"
                 value={formData.firstName}
-                onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                onChange={e => setFormData({ ...formData, firstName: e.target.value })}
                 required
-                disabled={isPending}
               />
             </div>
 
@@ -56,9 +60,8 @@ export function SignUpForm() {
                 type="text"
                 placeholder="Dupont"
                 value={formData.lastName}
-                onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                onChange={e => setFormData({ ...formData, lastName: e.target.value })}
                 required
-                disabled={isPending}
               />
             </div>
           </div>
@@ -70,9 +73,8 @@ export function SignUpForm() {
               type="email"
               placeholder="exemple@email.com"
               value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              onChange={e => setFormData({ ...formData, email: e.target.value })}
               required
-              disabled={isPending}
             />
           </div>
 
@@ -83,18 +85,11 @@ export function SignUpForm() {
               type="password"
               placeholder="••••••••"
               value={formData.password}
-              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+              onChange={e => setFormData({ ...formData, password: e.target.value })}
               required
-              disabled={isPending}
               minLength={8}
             />
           </div>
-
-          {isError && (
-            <div className="text-sm text-red-500">
-              {error?.message || "Une erreur est survenue lors de l'inscription"}
-            </div>
-          )}
 
           <Button type="submit" className="w-full" disabled={isPending}>
             {isPending ? "Inscription..." : "S'inscrire"}

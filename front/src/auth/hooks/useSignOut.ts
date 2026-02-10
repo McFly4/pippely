@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query"
-import { signOut } from "@/auth/services"
 import { useAuthContext } from "@/contexts/AuthContext"
+import { signOut } from "@/auth/services/signOut"
 
 export const useSignOut = () => {
   const { refetchSession } = useAuthContext()
@@ -9,6 +9,6 @@ export const useSignOut = () => {
     mutationFn: () => signOut(),
     onSuccess: async () => {
       await refetchSession()
-    },
+    }
   })
 }

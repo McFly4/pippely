@@ -1,11 +1,14 @@
 "use client"
 
 import Link from "next/link"
-import { useAuth, useSignOut } from "@/auth/hooks"
+import { useSignOut } from "@/auth/hooks/useSignOut"
+import { useAuth } from "@/auth/hooks/useAuth"
 import { Button } from "@/shared/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/components/ui/card"
+import { Badge } from "@/shared/components/ui/badge"
+import { Separator } from "@/shared/components/ui/separator"
 
-export function UserProfile() {
+export default function UserProfile() {
   const { user, isLoading, isAuthenticated } = useAuth()
   const { mutate: signOut, isPending } = useSignOut()
 
@@ -13,7 +16,7 @@ export function UserProfile() {
     return (
       <Card className="w-full max-w-md">
         <CardContent className="pt-6">
-          <p className="text-center text-gray-500">Chargement...</p>
+          <p className="text-center text-muted-foreground">Chargement...</p>
         </CardContent>
       </Card>
     )
@@ -27,10 +30,10 @@ export function UserProfile() {
           <CardDescription>Vous devez vous connecter pour accéder à cette page</CardDescription>
         </CardHeader>
         <CardContent className="space-y-2">
-          <Link href="/sign-in">
+          <Link href="/auth/sign-in">
             <Button className="w-full">Se connecter</Button>
           </Link>
-          <Link href="/sign-up">
+          <Link href="/auth/sign-up">
             <Button variant="outline" className="w-full">
               S&apos;inscrire
             </Button>
@@ -43,28 +46,37 @@ export function UserProfile() {
   return (
     <Card className="w-full max-w-md">
       <CardHeader>
-        <CardTitle>Profil utilisateur</CardTitle>
-        <CardDescription>Bienvenue {user.firstName} !</CardDescription>
+        <div className="flex items-center justify-between">
+          <div>
+            <CardTitle>Profil utilisateur</CardTitle>
+            <CardDescription>Bienvenue {user.firstName} !</CardDescription>
+          </div>
+          <Badge variant={user.emailVerified ? "default" : "secondary"}>
+            {user.emailVerified ? "Vérifié" : "Non vérifié"}
+          </Badge>
+        </div>
       </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="space-y-2">
-          <div className="grid grid-cols-2 gap-2 text-sm">
-            <span className="font-medium text-gray-500">Nom complet:</span>
-            <span>
+      <CardContent className="space-y-6">
+        <div className="space-y-4">
+          <div className="space-y-1">
+            <p className="text-sm font-medium text-muted-foreground">Nom complet</p>
+            <p className="text-base">
               {user.firstName} {user.lastName}
-            </span>
+            </p>
           </div>
-          <div className="grid grid-cols-2 gap-2 text-sm">
-            <span className="font-medium text-gray-500">Email:</span>
-            <span>{user.email}</span>
+
+          <Separator />
+
+          <div className="space-y-1">
+            <p className="text-sm font-medium text-muted-foreground">Email</p>
+            <p className="text-base">{user.email}</p>
           </div>
-          <div className="grid grid-cols-2 gap-2 text-sm">
-            <span className="font-medium text-gray-500">Rôle:</span>
-            <span>{user.role}</span>
-          </div>
-          <div className="grid grid-cols-2 gap-2 text-sm">
-            <span className="font-medium text-gray-500">Vérifié:</span>
-            <span>{user.emailVerified ? "Oui" : "Non"}</span>
+
+          <Separator />
+
+          <div className="space-y-1">
+            <p className="text-sm font-medium text-muted-foreground">Rôle</p>
+            <Badge variant="outline">{user.role}</Badge>
           </div>
         </div>
 
