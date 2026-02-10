@@ -1,9 +1,9 @@
 "use client"
 
 import Link from "next/link"
-import { useAuth, useSignOut } from "@/hooks/auth"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { useAuth, useSignOut } from "@/auth/hooks"
+import { Button } from "@/shared/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/components/ui/card"
 
 export function UserProfile() {
   const { user, isLoading, isAuthenticated } = useAuth()

@@ -1,13 +1,12 @@
 import { useMutation } from "@tanstack/react-query"
-import { signUp } from "@/services/auth"
+import { signOut } from "@/auth/services"
 import { useAuthContext } from "@/contexts/AuthContext"
-import type { SignUpData } from "@/types/auth.types"
 
-export const useSignUp = () => {
+export const useSignOut = () => {
   const { refetchSession } = useAuthContext()
 
   return useMutation({
-    mutationFn: (data: SignUpData) => signUp(data),
+    mutationFn: () => signOut(),
     onSuccess: async () => {
       await refetchSession()
     },

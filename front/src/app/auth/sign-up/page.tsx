@@ -1,6 +1,6 @@
 import Link from "next/link"
-import { SignUpForm } from "@/components/auth"
-import { ThemeToggle } from "@/components/theme"
+import { SignUpForm } from "@/auth/components"
+import { ThemeToggle } from "@/shared/components/theme"
 
 export default function SignUpPage() {
   return (

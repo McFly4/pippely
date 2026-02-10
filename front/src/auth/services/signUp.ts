@@ -1,5 +1,5 @@
 import axios from "axios"
-import type { SignUpData, AuthResponse } from "@/types/auth.types"
+import type { SignUpData, AuthResponse } from "@/auth/types/auth"
 
 const url = process.env.NEXT_PUBLIC_API_URL
 

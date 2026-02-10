@@ -1,6 +1,6 @@
 import Link from "next/link"
-import { SignInForm } from "@/components/auth"
-import { ThemeToggle } from "@/components/theme"
+import { SignInForm } from "@/auth/components"
+import { ThemeToggle } from "@/shared/components/theme"
 
 export default function SignInPage() {
   return (

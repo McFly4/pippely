@@ -1,7 +1,7 @@
 "use client"
 
-import { UserProfile } from "@/components/auth"
-import { ThemeToggle } from "@/components/theme"
+import { UserProfile } from "@/auth/components"
+import { ThemeToggle } from "@/shared/components/theme"
 
 export default function Page() {
   return (

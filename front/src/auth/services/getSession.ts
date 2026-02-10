@@ -1,5 +1,5 @@
 import axios from "axios"
-import type { Session } from "@/types/auth.types"
+import type { Session } from "@/auth/types/auth"
 
 const url = process.env.NEXT_PUBLIC_API_URL
 

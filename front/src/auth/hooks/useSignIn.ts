@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query"
-import { signIn } from "@/services/auth"
+import { signIn } from "@/auth/services"
 import { useAuthContext } from "@/contexts/AuthContext"
-import type { SignInData } from "@/types/auth.types"
+import type { SignInData } from "@/auth/types/auth"
 
 export const useSignIn = () => {
   const { refetchSession } = useAuthContext()
