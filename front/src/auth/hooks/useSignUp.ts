@@ -1,15 +1,14 @@
-import { useMutation } from "@tanstack/react-query"
-import { useAuthContext } from "@/contexts/AuthContext"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import type { SignUpData } from "@/auth/types/auth"
 import { signUp } from "@/auth/services/signUp"
 
 export const useSignUp = () => {
-  const { refetchSession } = useAuthContext()
+  const queryClient = useQueryClient()
 
   return useMutation({
     mutationFn: (data: SignUpData) => signUp(data),
     onSuccess: async () => {
-      await refetchSession()
+      await queryClient.invalidateQueries({ queryKey: ["session"] })
     }
   })
 }

@@ -1,6 +1,5 @@
 "use client"
 
-import Link from "next/link"
 import { useSignOut } from "@/auth/hooks/useSignOut"
 import { useAuth } from "@/auth/hooks/useAuth"
 import { Button } from "@/shared/components/ui/button"
@@ -23,24 +22,7 @@ export default function UserProfile() {
   }
 
   if (!isAuthenticated || !user) {
-    return (
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle>Non connecté</CardTitle>
-          <CardDescription>Vous devez vous connecter pour accéder à cette page</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-2">
-          <Link href="/auth/sign-in">
-            <Button className="w-full">Se connecter</Button>
-          </Link>
-          <Link href="/auth/sign-up">
-            <Button variant="outline" className="w-full">
-              S&apos;inscrire
-            </Button>
-          </Link>
-        </CardContent>
-      </Card>
-    )
+    return null // Le middleware redirigera vers /auth/sign-in
   }
 
   return (

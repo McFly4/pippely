@@ -17,15 +17,24 @@ export default function SignUpForm() {
     lastName: ""
   })
 
-  function handleSubmit() {
-    signUp(formData, {
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+
+    // Construire le nom complet pour Better Auth
+    const signUpPayload = {
+      ...formData,
+      name: `${formData.firstName} ${formData.lastName}`
+    }
+
+    signUp(signUpPayload, {
       onSuccess: () => {
         toast.success("Inscription réussie ! Veuillez vérifier votre email pour confirmer votre compte.", {
           position: "top-right"
         })
       },
       onError: (error: any) => {
-        toast.error(error, {
+        const errorMessage = error?.response?.data?.message || error?.message || "Une erreur est survenue lors de l'inscription"
+        toast.error(errorMessage, {
           position: "top-right"
         })
       }

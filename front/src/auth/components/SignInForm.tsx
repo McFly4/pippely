@@ -10,7 +10,7 @@ import { Input } from "@/shared/components/ui/input"
 
 export default function SignInForm() {
   const router = useRouter()
-  const { mutate: signIn, isPending, isError, error } = useSignIn()
+  const { mutate: signIn, isPending } = useSignIn()
   const [formData, setFormData] = useState({
     email: "",
     password: ""

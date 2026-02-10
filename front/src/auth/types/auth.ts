@@ -22,6 +22,7 @@ export interface Session {
 export interface SignUpData {
   email: string
   password: string
+  name: string
   firstName: string
   lastName: string
 }
