@@ -2,11 +2,10 @@ import postgres from 'postgres';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import * as schema from '../db/schema';
 
-const client = postgres(process.env.DATABASE_URL!);
-const db = drizzle(client, { schema });
-
-// Cache pour l'instance Better Auth
+// Cache pour l'instance Better Auth et le client DB
 let authInstance: any = null;
+let dbClient: any = null;
+let db: any = null;
 
 /**
  * Initialise Better Auth avec un import dynamique (ESM)
@@ -17,11 +16,18 @@ export async function getAuth() {
     return authInstance;
   }
 
+  // Initialiser le client DB si ce n'est pas déjà fait
+  if (!dbClient) {
+    dbClient = postgres(process.env.DIRECT_URL || process.env.DATABASE_URL!);
+    db = drizzle(dbClient, { schema });
+  }
+
   // Import dynamique de Better Auth (ESM)
   const { betterAuth } = await import('better-auth');
   const { drizzleAdapter } = await import('better-auth/adapters/drizzle');
 
   authInstance = betterAuth({
+    baseURL: process.env.BACKEND_URL || 'http://localhost:4000',
     database: drizzleAdapter(db, {
       provider: 'pg',
       schema: {

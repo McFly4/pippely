@@ -26,6 +26,8 @@ export default function SignUpForm() {
       name: `${formData.firstName} ${formData.lastName}`
     }
 
+    console.log(`signUpPayload`, signUpPayload)
+
     signUp(signUpPayload, {
       onSuccess: () => {
         toast.success("Inscription réussie ! Veuillez vérifier votre email pour confirmer votre compte.", {
@@ -33,7 +35,8 @@ export default function SignUpForm() {
         })
       },
       onError: (error: any) => {
-        const errorMessage = error?.response?.data?.message || error?.message || "Une erreur est survenue lors de l'inscription"
+        const errorMessage =
+          error?.response?.data?.message || error?.message || "Une erreur est survenue lors de l'inscription"
         toast.error(errorMessage, {
           position: "top-right"
         })

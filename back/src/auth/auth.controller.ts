@@ -17,12 +17,26 @@ export class AuthController {
    */
   @All('*')
   async handleAuth(@Req() req: Request, @Res() res: Response) {
+    // Si c'est un signup, générer le champ 'name' à partir de firstName et lastName
+    if (req.url.includes('/sign-up') && req.body) {
+      const { firstName, lastName } = req.body;
+      if (firstName && lastName && !req.body.name) {
+        req.body.name = `${firstName} ${lastName}`;
+      }
+    }
+
     // Convertir la requête Express en Request standard
     const url = new URL(req.url, `${req.protocol}://${req.get('host')}`);
 
+    // Créer les headers en incluant explicitement Content-Type pour les requêtes avec body
+    const headers = new Headers(req.headers as HeadersInit);
+    if (req.method !== 'GET' && req.method !== 'HEAD' && req.body) {
+      headers.set('Content-Type', 'application/json');
+    }
+
     const request = new Request(url, {
       method: req.method,
-      headers: req.headers as HeadersInit,
+      headers,
       body:
         req.method !== 'GET' && req.method !== 'HEAD'
           ? JSON.stringify(req.body)
@@ -41,6 +55,12 @@ export class AuthController {
 
     // Envoyer le body
     const body = await response.text();
+
+    // Logger l'erreur si status >= 400
+    if (response.status >= 400) {
+      console.log('Better Auth error response:', body);
+    }
+
     res.send(body);
   }
 }
